@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useRandomBackground } from "../hooks/useRandomBackground";
 import { useRandomQuote } from "../hooks/useRandomQuote";
@@ -10,8 +10,61 @@ const QUICK_LINKS = [
   { label: "影视网", href: "/movies", hint: "片库聚合", shortcut: "4" },
 ];
 
+const BADGE_SPIN_DURATION_MS = 2000;
+const BADGE_RESET_DURATION_MS = 320;
+const BADGE_SPIN_SCALE_BASE = 1.04;
+const BADGE_SPIN_SCALE_PEAK = 1.08;
+
+type BadgeTransform = {
+  angle: number;
+  scale: number;
+};
+
+function readBadgeTransform(element: HTMLElement): BadgeTransform {
+  const transform = window.getComputedStyle(element).transform;
+  if (!transform || transform === "none") {
+    return { angle: 0, scale: 1 };
+  }
+
+  if (transform.startsWith("matrix3d(")) {
+    const values = transform
+      .slice(9, -1)
+      .split(",")
+      .map((value) => Number(value.trim()));
+    const a = values[0];
+    const b = values[1];
+    if (a === undefined || b === undefined || Number.isNaN(a) || Number.isNaN(b)) {
+      return { angle: 0, scale: 1 };
+    }
+    return {
+      angle: (Math.atan2(b, a) * 180) / Math.PI,
+      scale: Math.hypot(a, b) || 1,
+    };
+  }
+
+  if (transform.startsWith("matrix(")) {
+    const values = transform
+      .slice(7, -1)
+      .split(",")
+      .map((value) => Number(value.trim()));
+    const a = values[0];
+    const b = values[1];
+    if (a === undefined || b === undefined || Number.isNaN(a) || Number.isNaN(b)) {
+      return { angle: 0, scale: 1 };
+    }
+    return {
+      angle: (Math.atan2(b, a) * 180) / Math.PI,
+      scale: Math.hypot(a, b) || 1,
+    };
+  }
+
+  return { angle: 0, scale: 1 };
+}
+
 export default function HomePage() {
   const navigate = useNavigate();
+  const badgeRef = useRef<HTMLDivElement | null>(null);
+  const badgeAnimationRef = useRef<Animation | null>(null);
   const { backgroundUrl, current, total, ready, shuffleBackground } = useRandomBackground();
   const { quote, source, loading, refreshQuote } = useRandomQuote();
   const hasQuote = quote.trim().length > 0;
@@ -65,6 +118,68 @@ export default function HomePage() {
     };
   }, [navigate, refreshQuote, shuffleBackground]);
 
+  useEffect(
+    () => () => {
+      badgeAnimationRef.current?.cancel();
+      badgeAnimationRef.current = null;
+    },
+    [],
+  );
+
+  const startBadgeSpin = () => {
+    const element = badgeRef.current;
+    if (!element) return;
+
+    const { angle, scale } = readBadgeTransform(element);
+    badgeAnimationRef.current?.cancel();
+    badgeAnimationRef.current = element.animate(
+      [
+        { transform: `rotate(${angle}deg) scale(${scale})` },
+        { transform: `rotate(${angle + 180}deg) scale(${BADGE_SPIN_SCALE_PEAK})` },
+        { transform: `rotate(${angle + 360}deg) scale(${BADGE_SPIN_SCALE_BASE})` },
+      ],
+      {
+        duration: BADGE_SPIN_DURATION_MS,
+        easing: "linear",
+        iterations: Infinity,
+        fill: "forwards",
+      },
+    );
+  };
+
+  const resetBadgeTransform = () => {
+    const element = badgeRef.current;
+    if (!element) return;
+
+    const { angle, scale } = readBadgeTransform(element);
+    const currentScale = Math.max(1, Math.min(scale, BADGE_SPIN_SCALE_PEAK));
+    badgeAnimationRef.current?.cancel();
+    const resetAnimation = element.animate(
+      [
+        { transform: `rotate(${angle}deg) scale(${currentScale})` },
+        { transform: "rotate(0deg) scale(1)" },
+      ],
+      {
+        duration: BADGE_RESET_DURATION_MS,
+        easing: "ease-out",
+        iterations: 1,
+        fill: "forwards",
+      },
+    );
+
+    badgeAnimationRef.current = resetAnimation;
+    resetAnimation.onfinish = () => {
+      if (badgeAnimationRef.current !== resetAnimation) return;
+      element.style.transform = "rotate(0deg) scale(1)";
+      badgeAnimationRef.current = null;
+    };
+    resetAnimation.oncancel = () => {
+      if (badgeAnimationRef.current === resetAnimation) {
+        badgeAnimationRef.current = null;
+      }
+    };
+  };
+
   return (
     <section className="landing-page">
       <div className="landing-bg-image" style={{ backgroundImage: `url("${backgroundUrl}")` }} />
@@ -82,7 +197,15 @@ export default function HomePage() {
       </header>
 
       <div className="landing-content">
-        <div className="brand-badge">A</div>
+        <div
+          className="brand-badge"
+          ref={badgeRef}
+          onMouseEnter={startBadgeSpin}
+          onMouseLeave={resetBadgeTransform}
+          onMouseUp={resetBadgeTransform}
+        >
+          <img className="brand-badge-img" src="/头像.png" alt="ASLant 头像" />
+        </div>
 
         <h1 className="landing-title">
           I&apos;m <span>ASLant.</span>
@@ -130,7 +253,7 @@ export default function HomePage() {
         <span className="footer-divider" aria-hidden="true">
           ·
         </span>
-        <span className="footer-icp">鲁ICP备2023044278号</span>
+        <span className="footer-icp">鲁ICP备2025157599号</span>
       </footer>
     </section>
   );

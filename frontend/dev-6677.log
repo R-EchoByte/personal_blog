@@ -1,0 +1,25 @@
+
+> personal-blog-frontend@0.1.0 dev:6677
+> npm run bg:sync && vite --host 0.0.0.0 --port 6677
+
+
+> personal-blog-frontend@0.1.0 bg:sync
+> node scripts/generate-bg-manifest.mjs
+
+[bg-manifest] generated 5 image(s): public\bj-manifest.json
+
+  [32m[1mVITE[22m v7.3.1[39m  [2mready in [0m[1m253[22m[2m[0m ms[22m
+
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m6677[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://192.168.17.1:[1m6677[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://192.168.179.1:[1m6677[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://10.0.2.90:[1m6677[22m/[39m
+[2m[32m  ➜[39m[22m[2m  press [22m[1mh + enter[22m[2m to show help[22m
+[2m20:15:03[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2msrc/hooks/useRandomQuote.ts[22m
+[2m20:18:58[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2msrc/hooks/useRandomQuote.ts[22m
+[2m20:19:16[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2msrc/pages/HomePage.tsx[22m
+[2m20:20:18[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2msrc/hooks/useRandomQuote.ts[22m
+[2m20:22:39[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2msrc/hooks/useRandomQuote.ts[22m
+[2m20:22:51[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2msrc/pages/HomePage.tsx[22m
+[2m20:23:45[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2msrc/pages/HomePage.tsx[22m
+^C

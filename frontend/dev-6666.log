@@ -1,0 +1,17 @@
+
+> personal-blog-frontend@0.1.0 dev
+> npm run bg:sync && vite --host 0.0.0.0 --port 6666
+
+
+> personal-blog-frontend@0.1.0 bg:sync
+> node scripts/generate-bg-manifest.mjs
+
+[bg-manifest] generated 5 image(s): public\bj-manifest.json
+
+  [32m[1mVITE[22m v7.3.1[39m  [2mready in [0m[1m301[22m[2m[0m ms[22m
+
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m6666[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://10.0.2.90:[1m6666[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://192.168.17.1:[1m6666[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://192.168.179.1:[1m6666[22m/[39m
+[2m[32m  ➜[39m[22m[2m  press [22m[1mh + enter[22m[2m to show help[22m

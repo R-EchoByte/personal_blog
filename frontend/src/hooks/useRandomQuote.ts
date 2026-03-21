@@ -7,8 +7,8 @@ type QuoteResponse = {
 
 const EMPTY_QUOTE = "";
 const EMPTY_SOURCE = "";
-const MAX_QUOTE_LEN = 16;
 const MAX_RETRIES = 5;
+const REQUEST_TIMEOUT_MS = 4500;
 
 export function useRandomQuote() {
   const [quote, setQuote] = useState(EMPTY_QUOTE);
@@ -22,27 +22,40 @@ export function useRandomQuote() {
       let nextSource = EMPTY_SOURCE;
 
       for (let attempt = 0; attempt < MAX_RETRIES; attempt += 1) {
-        const response = await fetch("/api/v1/quote/random", { cache: "no-store" });
-        if (!response.ok) {
-          continue;
-        }
+        const controller = new AbortController();
+        const timeoutId = window.setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
 
-        const payload = (await response.json()) as QuoteResponse;
-        const rawQuote = payload.quote?.trim() ?? EMPTY_QUOTE;
-        if (!rawQuote || rawQuote.length > MAX_QUOTE_LEN) {
-          continue;
-        }
+        try {
+          const response = await fetch(`/api/v1/quote/random?ts=${Date.now()}-${attempt}`, {
+            cache: "no-store",
+            signal: controller.signal,
+          });
+          if (!response.ok) {
+            continue;
+          }
 
-        nextQuote = rawQuote;
-        nextSource = payload.source?.trim() ?? EMPTY_SOURCE;
-        break;
+          const payload = (await response.json()) as QuoteResponse;
+          const rawQuote = payload.quote?.trim() ?? EMPTY_QUOTE;
+          if (!rawQuote) {
+            continue;
+          }
+
+          nextQuote = rawQuote;
+          nextSource = payload.source?.trim() ?? EMPTY_SOURCE;
+          break;
+        } catch {
+          continue;
+        } finally {
+          window.clearTimeout(timeoutId);
+        }
       }
 
-      setQuote(nextQuote);
-      setSource(nextSource);
+      if (nextQuote) {
+        setQuote(nextQuote);
+        setSource(nextSource);
+      }
     } catch {
-      setQuote(EMPTY_QUOTE);
-      setSource(EMPTY_SOURCE);
+      // Keep previous quote when request fails.
     } finally {
       setLoading(false);
     }

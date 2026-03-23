@@ -25,15 +25,26 @@
 建议环境：
 - Node.js 20+
 - Python 3.11+
+- uv（Python 包与虚拟环境管理）
 
 1. 启动后端
 
 ```bash
 cd backend
-python -m venv .venv
+uv venv
 .venv\Scripts\activate
-pip install -r requirements.txt
-uvicorn app.main:app --reload --port 8000
+uv pip install -r requirements.txt
+uv run uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+```
+
+后端固定端口示例（6666）：
+
+```bash
+# Windows: 先检查端口是否被占用
+netstat -ano | findstr :6666
+
+# 若无输出则可直接启动
+uv run uvicorn app.main:app --reload --host 0.0.0.0 --port 6666
 ```
 
 2. 启动前端
@@ -53,6 +64,7 @@ npm run dev:6677
 默认访问地址：
 - Frontend: `http://localhost:5173`
 - Backend: `http://localhost:8000`
+- Backend(6666示例): `http://localhost:6666`
 
 ## API 一览
 

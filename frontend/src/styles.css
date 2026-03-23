@@ -40,14 +40,18 @@ body {
   padding: 32px 16px 28px;
   isolation: isolate;
   overflow-x: hidden;
-  overflow-y: auto;
+  overflow-y: hidden;
 }
 
 .landing-page::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(160deg, rgba(7, 12, 27, 0.68), rgba(23, 35, 65, 0.42));
+  background: linear-gradient(
+    160deg,
+    rgba(7, 12, 27, 0.68),
+    rgba(23, 35, 65, 0.42)
+  );
   z-index: -2;
 }
 
@@ -65,20 +69,24 @@ body {
 .landing-backdrop {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 75% 28%, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0) 38%);
+  background: radial-gradient(
+    circle at 75% 28%,
+    rgba(255, 255, 255, 0.24),
+    rgba(255, 255, 255, 0) 38%
+  );
   z-index: -1;
 }
 
 .landing-content {
   width: min(860px, 100%);
   text-align: center;
-  margin-top: 34px;
-  padding-bottom: 56px;
+  margin-top: 48px;
+  padding-bottom: 36px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  max-height: calc(100dvh - 112px);
+  max-height: calc(100dvh - 120px);
   animation: rise-in 0.45s ease-out both;
 }
 
@@ -133,7 +141,10 @@ body {
   font-size: 13px;
   font-weight: 700;
   cursor: pointer;
-  transition: transform 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+  transition:
+    transform 0.15s ease,
+    border-color 0.15s ease,
+    background-color 0.15s ease;
 }
 
 .shuffle-btn:hover {
@@ -175,29 +186,38 @@ body {
   transform: scale(1.08);
 }
 
-.landing-title {
-  margin: 0;
-  font-size: clamp(42px, 7vw, 72px);
-  font-weight: 700;
-  letter-spacing: 1.2px;
-  text-shadow: 0 10px 24px rgba(5, 8, 18, 0.42);
+.particle-text-stage {
+  width: min(720px, 100%);
+  margin: 2px auto 8px;
 }
 
-.landing-title span {
-  color: #d9ecff;
+.particle-text-canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  pointer-events: auto;
 }
 
 .landing-subtitle {
-  margin: 8px auto 20px;
+  margin: 6px auto 20px;
   width: fit-content;
   padding-top: 8px;
+  font-family:
+    "Avenir Next", "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
   font-size: 16px;
+  font-weight: 600;
   letter-spacing: 0.12em;
   color: rgba(244, 250, 255, 0.92);
   border-top: 1px solid rgba(255, 255, 255, 0.45);
+  text-shadow: 0 6px 18px rgba(5, 10, 22, 0.35);
 }
 
 .quote-card {
+  --quote-btn-safe-space: 132px;
   position: relative;
   margin: 0 auto 12px;
   width: min(760px, 100%);
@@ -225,7 +245,9 @@ body {
   font-size: 11px;
   font-weight: 600;
   cursor: pointer;
-  transition: border-color 0.16s ease, background-color 0.16s ease;
+  transition:
+    border-color 0.16s ease,
+    background-color 0.16s ease;
 }
 
 .quote-refresh-btn:hover:not(:disabled) {
@@ -257,13 +279,13 @@ body {
 }
 
 .quote-text {
-  margin: 0;
+  margin: 0 auto;
   font-size: clamp(22px, 2.7vw, 34px);
   font-weight: 700;
   letter-spacing: 1px;
   line-height: 1.32;
-  max-width: 100%;
-  padding: 0 30px 2px;
+  max-width: calc(100% - var(--quote-btn-safe-space));
+  padding: 0 24px 2px;
   word-break: break-word;
   overflow-wrap: anywhere;
   white-space: normal;
@@ -283,6 +305,8 @@ body {
 
 .quote-author {
   margin: 10px 0 0;
+  max-width: calc(100% - var(--quote-btn-safe-space));
+  margin-left: auto;
   text-align: right;
   font-size: 24px;
   font-weight: 700;
@@ -311,7 +335,10 @@ body {
   text-decoration: none;
   font-size: 14px;
   font-weight: 600;
-  transition: transform 0.18s ease, background-color 0.18s ease, border-color 0.18s ease;
+  transition:
+    transform 0.18s ease,
+    background-color 0.18s ease,
+    border-color 0.18s ease;
 }
 
 .quick-link-key {
@@ -355,7 +382,7 @@ body {
 
 .landing-footer {
   position: absolute;
-  bottom: 16px;
+  bottom: 14px;
   left: 50%;
   transform: translateX(-50%);
   display: inline-flex;
@@ -366,7 +393,11 @@ body {
   border: 1px solid rgba(194, 218, 255, 0.24);
   background:
     linear-gradient(135deg, rgba(18, 30, 52, 0.72), rgba(9, 17, 30, 0.82)),
-    radial-gradient(circle at 12% 8%, rgba(178, 221, 255, 0.22), rgba(178, 221, 255, 0));
+    radial-gradient(
+      circle at 12% 8%,
+      rgba(178, 221, 255, 0.22),
+      rgba(178, 221, 255, 0)
+    );
   box-shadow:
     0 6px 22px rgba(5, 10, 22, 0.48),
     inset 0 1px 0 rgba(255, 255, 255, 0.14);
@@ -385,7 +416,11 @@ body {
   width: 48px;
   height: 2px;
   border-radius: 999px;
-  background: linear-gradient(90deg, rgba(130, 198, 255, 0.95), rgba(130, 198, 255, 0));
+  background: linear-gradient(
+    90deg,
+    rgba(130, 198, 255, 0.95),
+    rgba(130, 198, 255, 0)
+  );
 }
 
 .footer-label {
@@ -428,7 +463,12 @@ body {
   }
 
   .quote-card {
+    --quote-btn-safe-space: 104px;
     padding: 20px 18px 18px;
+  }
+
+  .particle-text-stage {
+    margin-bottom: 6px;
   }
 
   .quote-refresh-btn {
@@ -456,13 +496,14 @@ body {
   }
 
   .quote-text {
-    padding: 0 18px;
+    max-width: calc(100% - var(--quote-btn-safe-space));
+    padding: 0 14px;
   }
 
   .landing-content {
-    margin-top: 24px;
-    padding-bottom: 64px;
-    max-height: calc(100dvh - 98px);
+    margin-top: 36px;
+    padding-bottom: 44px;
+    max-height: calc(100dvh - 112px);
   }
 
   .quick-link {
@@ -478,7 +519,7 @@ body {
   }
 
   .landing-footer {
-    max-width: calc(100% - 28px);
+    max-width: calc(100% - 20px);
     text-overflow: ellipsis;
     font-size: clamp(12px, 3.1vw, 14px);
     padding: 8px 12px 9px;
@@ -488,6 +529,44 @@ body {
   .shortcut-guide {
     font-size: 12px;
     line-height: 1.35;
+  }
+}
+
+@media (max-height: 760px) {
+  .landing-page {
+    padding: 16px 12px 14px;
+  }
+
+  .landing-content {
+    margin-top: 16px;
+    padding-bottom: 40px;
+    max-height: calc(100dvh - 108px);
+  }
+
+  .landing-subtitle {
+    margin: 4px auto 12px;
+    font-size: 14px;
+  }
+
+  .quote-card {
+    margin-bottom: 8px;
+    padding: 16px 16px 14px;
+  }
+
+  .quick-links {
+    margin-top: 8px;
+    gap: 10px;
+  }
+
+  .shortcut-guide {
+    margin-top: 8px;
+    font-size: 12px;
+  }
+
+  .landing-footer {
+    bottom: 7px;
+    padding: 7px 10px 8px;
+    font-size: 12px;
   }
 }
 

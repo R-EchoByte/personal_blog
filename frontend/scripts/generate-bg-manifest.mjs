@@ -28,7 +28,9 @@ async function main() {
     .map((fullPath) => path.relative(publicDir, fullPath))
     .filter((relativePath) => relativePath.toLowerCase() !== "bj-manifest.json")
     .filter((relativePath) => /^bj/i.test(path.basename(relativePath)))
-    .filter((relativePath) => imageExts.has(path.extname(relativePath).toLowerCase()))
+    .filter((relativePath) =>
+      imageExts.has(path.extname(relativePath).toLowerCase()),
+    )
     .map((relativePath) => `/${relativePath.replace(/\\/g, "/")}`)
     .sort((a, b) => a.localeCompare(b));
 
@@ -37,8 +39,14 @@ async function main() {
     generatedAt: new Date().toISOString(),
   };
 
-  await fs.writeFile(outputFile, `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
-  console.log(`[bg-manifest] generated ${images.length} image(s): ${path.relative(projectRoot, outputFile)}`);
+  await fs.writeFile(
+    outputFile,
+    `${JSON.stringify(manifest, null, 2)}\n`,
+    "utf8",
+  );
+  console.log(
+    `[bg-manifest] generated ${images.length} image(s): ${path.relative(projectRoot, outputFile)}`,
+  );
 }
 
 main().catch((error) => {

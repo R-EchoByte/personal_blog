@@ -1,0 +1,390 @@
+.moviehub-page {
+  height: 100dvh;
+  display: grid;
+  grid-template-columns: 172px minmax(0, 1fr);
+  background: #0b1018;
+  color: #e9eef6;
+  overflow: hidden;
+}
+
+.moviehub-sidebar {
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  background: #090e15;
+  padding: 16px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.moviehub-logo {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #f2f6fc;
+}
+
+.moviehub-side-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.moviehub-side-item {
+  width: 100%;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: rgba(221, 229, 241, 0.72);
+  padding: 8px 10px;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.2;
+  -webkit-tap-highlight-color: transparent;
+  outline: 0;
+  cursor: pointer;
+  transition:
+    border-color 0.18s ease,
+    background-color 0.18s ease,
+    color 0.18s ease;
+}
+
+.moviehub-side-item:hover {
+  border-color: rgba(130, 180, 248, 0.3);
+  background: rgba(23, 38, 60, 0.45);
+  color: #e7f0fd;
+}
+
+.moviehub-side-item:focus-visible {
+  border-color: rgba(141, 189, 252, 0.8);
+  background: rgba(30, 48, 74, 0.58);
+  color: #eef4ff;
+}
+
+.moviehub-side-item.is-active {
+  border-color: rgba(131, 180, 247, 0.56);
+  background: rgba(41, 67, 102, 0.54);
+  color: #f0f6ff;
+}
+
+.moviehub-back-home {
+  margin-top: 8px;
+  text-decoration: none;
+  text-align: center;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: #111827;
+  color: #dbe7f7;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 8px;
+}
+
+.moviehub-main {
+  min-height: 0;
+  overflow: auto;
+  padding: 12px;
+}
+
+.moviehub-topbar {
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #0e1521;
+  padding: 10px 12px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+}
+
+.moviehub-top-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.moviehub-search-panel {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.moviehub-search-wrap {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+}
+
+.moviehub-search {
+  width: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: #0a1320;
+  color: #e5edf9;
+  border-radius: 999px;
+  padding: 10px 12px;
+  font-size: 14px;
+}
+
+.moviehub-search::placeholder {
+  color: rgba(186, 202, 224, 0.7);
+}
+
+.moviehub-search-clear {
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  background: #172435;
+  color: rgba(221, 232, 247, 0.9);
+  padding: 6px 10px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.moviehub-search-result {
+  margin: 0;
+  font-size: 12px;
+  color: rgba(189, 206, 228, 0.78);
+}
+
+.moviehub-channel {
+  margin-top: 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #0d1420;
+  padding: 12px;
+}
+
+.moviehub-channel h1 {
+  margin: 0 0 10px;
+  font-size: 26px;
+  font-weight: 800;
+}
+
+.moviehub-categories {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.moviehub-category {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  background: #131c2a;
+  color: rgba(223, 233, 246, 0.78);
+  padding: 6px 12px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.moviehub-category.is-active {
+  border-color: rgba(130, 181, 250, 0.7);
+  background: #1d3352;
+  color: #fff;
+}
+
+.moviehub-player-strip {
+  margin-top: 10px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background-size: cover;
+  background-position: center;
+  min-height: 210px;
+}
+
+.moviehub-player-mask {
+  min-height: 210px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background: linear-gradient(
+    to top,
+    rgba(6, 10, 16, 0.9),
+    rgba(6, 10, 16, 0.42) 58%,
+    rgba(6, 10, 16, 0.18)
+  );
+}
+
+.moviehub-player-meta {
+  margin: 0 0 6px;
+  font-size: 12px;
+  color: rgba(194, 208, 226, 0.9);
+}
+
+.moviehub-player-mask h2 {
+  margin: 0;
+  font-size: clamp(24px, 2.7vw, 34px);
+}
+
+.moviehub-player-desc {
+  margin: 8px 0 0;
+  font-size: 13px;
+  color: rgba(210, 223, 239, 0.9);
+}
+
+.moviehub-player-people {
+  margin: 6px 0 0;
+  font-size: 12px;
+  color: rgba(189, 206, 229, 0.86);
+}
+
+.moviehub-player-actions {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: rgba(204, 219, 238, 0.84);
+  font-size: 12px;
+}
+
+.moviehub-play-btn {
+  border: 0;
+  border-radius: 8px;
+  background: #dbe9fb;
+  color: #112338;
+  padding: 7px 11px;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.moviehub-episode-row {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.moviehub-episode {
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 8px;
+  background: rgba(10, 17, 27, 0.84);
+  color: rgba(218, 229, 244, 0.86);
+  padding: 5px 8px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.moviehub-episode.is-active {
+  border-color: rgba(129, 183, 255, 0.84);
+  background: #20406a;
+  color: #fff;
+}
+
+.moviehub-grid {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.moviehub-card {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  background: #0e1623;
+  color: #e9eff8;
+  text-align: left;
+  padding: 0;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.moviehub-card.is-active {
+  border-color: rgba(126, 177, 245, 0.68);
+}
+
+.moviehub-card-cover-wrap {
+  position: relative;
+  display: block;
+}
+
+.moviehub-card-cover-wrap img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  display: block;
+}
+
+.moviehub-badge,
+.moviehub-update,
+.moviehub-score {
+  position: absolute;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.moviehub-badge {
+  top: 8px;
+  right: 8px;
+  border-radius: 6px;
+  padding: 2px 6px;
+  background: rgba(245, 102, 38, 0.95);
+}
+
+.moviehub-update {
+  right: 8px;
+  bottom: 8px;
+  color: rgba(239, 246, 255, 0.96);
+}
+
+.moviehub-score {
+  left: 8px;
+  bottom: 8px;
+  color: rgba(250, 220, 156, 0.96);
+}
+
+.moviehub-card-title {
+  display: block;
+  margin: 8px 9px 0;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.moviehub-card-subtitle {
+  display: block;
+  margin: 6px 9px 0;
+  color: rgba(201, 216, 236, 0.84);
+  font-size: 12px;
+}
+
+.moviehub-card-heat {
+  display: block;
+  margin: 8px 9px 9px;
+  color: rgba(233, 177, 95, 0.9);
+  font-size: 12px;
+}
+
+@media (max-width: 1200px) {
+  .moviehub-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .moviehub-page {
+    grid-template-columns: 1fr;
+  }
+
+  .moviehub-sidebar {
+    border-right: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 10px;
+  }
+
+  .moviehub-side-nav {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .moviehub-topbar {
+    grid-template-columns: 1fr;
+  }
+
+  .moviehub-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

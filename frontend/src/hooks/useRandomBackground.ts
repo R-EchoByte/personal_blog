@@ -30,11 +30,15 @@ export function useRandomBackground() {
 
     async function loadManifest() {
       try {
-        const response = await fetch("/bj-manifest.json", { cache: "no-store" });
+        const response = await fetch("/bj-manifest.json", {
+          cache: "force-cache",
+        });
         if (!response.ok) return;
 
         const manifest = (await response.json()) as BgManifest;
-        const normalized = (manifest.images ?? []).filter((path) => /^\/bj/i.test(path));
+        const normalized = (manifest.images ?? []).filter((path) =>
+          /^\/bj/i.test(path),
+        );
         if (!mounted || normalized.length === 0) return;
 
         const randomIndex = pickRandomIndex(normalized.length, -1);

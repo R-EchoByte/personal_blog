@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "bg:sync": "node scripts/generate-bg-manifest.mjs",
+    "clean": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\"",
     "dev": "npm run bg:sync && vite",
     "dev:6677": "npm run bg:sync && vite --host 0.0.0.0 --port 6677",
-    "build": "npm run bg:sync && vite build",
+    "build": "npm run clean && npm run bg:sync && vite build",
     "preview": "vite preview"
   },
   "dependencies": {

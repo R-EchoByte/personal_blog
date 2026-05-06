@@ -1,10 +1,33 @@
 {
   "images": [
-    "/bj1.png",
-    "/bj2.png",
-    "/bj3.png",
-    "/bj4.png",
-    "/bj5.png"
+    "/bj3.webp",
+    "/bj5.webp",
+    "/bj1.webp",
+    "/bj4.webp",
+    "/bj2.webp"
   ],
-  "generatedAt": "2026-03-21T11:17:30.422Z"
+  "initialImage": "/bj3.webp",
+  "entries": [
+    {
+      "src": "/bj3.webp",
+      "bytes": 76862
+    },
+    {
+      "src": "/bj5.webp",
+      "bytes": 147120
+    },
+    {
+      "src": "/bj1.webp",
+      "bytes": 162344
+    },
+    {
+      "src": "/bj4.webp",
+      "bytes": 170350
+    },
+    {
+      "src": "/bj2.webp",
+      "bytes": 179068
+    }
+  ],
+  "generatedAt": "2026-05-06T09:33:07.258Z"
 }

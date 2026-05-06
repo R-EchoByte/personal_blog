@@ -1,22 +1,19 @@
 import { createBrowserRouter } from "react-router-dom";
 
 import App from "../App";
-import FeaturePendingPage from "../pages/FeaturePendingPage";
-import HomePage from "../pages/HomePage";
-import MoviesPage from "../pages/MoviesPage";
-import NotFoundPage from "../pages/NotFoundPage";
+import { lazyRouteElements } from "./lazyRoutes";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
     children: [
-      { index: true, element: <HomePage /> },
-      { path: "blog", element: <FeaturePendingPage title="Blog" /> },
-      { path: "ai", element: <FeaturePendingPage title="AI 工具" /> },
-      { path: "software", element: <FeaturePendingPage title="软件资源" /> },
-      { path: "movies", element: <MoviesPage /> },
-      { path: "*", element: <NotFoundPage /> },
+      { index: true, element: lazyRouteElements.home },
+      { path: "blog", element: lazyRouteElements.blog },
+      { path: "ai", element: lazyRouteElements.ai },
+      { path: "software", element: lazyRouteElements.software },
+      { path: "movies", element: lazyRouteElements.movies },
+      { path: "*", element: lazyRouteElements.notFound },
     ],
   },
 ]);

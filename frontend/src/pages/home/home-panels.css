@@ -1,0 +1,233 @@
+.quote-card {
+  --quote-btn-safe-space: 132px;
+  position: relative;
+  margin: 0 auto 12px;
+  width: min(760px, 100%);
+  border-radius: 18px;
+  border: 1px solid var(--line-soft);
+  background: var(--surface-1);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 20px 50px rgba(2, 10, 25, 0.42);
+  padding: 28px 34px 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  animation: home-rise-in 0.55s ease-out both;
+}
+
+.quote-refresh-btn {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(10, 18, 32, 0.56);
+  color: rgba(239, 247, 255, 0.9);
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    border-color 0.16s ease,
+    background-color 0.16s ease;
+}
+
+.quote-refresh-btn:hover:not(:disabled) {
+  border-color: rgba(255, 255, 255, 0.36);
+  background: rgba(22, 37, 67, 0.72);
+}
+
+.quote-refresh-btn:disabled {
+  opacity: 0.7;
+  cursor: default;
+}
+
+.quote-mark {
+  position: absolute;
+  margin: 0;
+  font-size: 34px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.quote-mark-start {
+  left: 22px;
+  top: 8px;
+}
+
+.quote-mark-end {
+  right: 22px;
+  bottom: 22px;
+}
+
+.quote-text {
+  margin: 0 auto;
+  font-size: clamp(22px, 2.7vw, 34px);
+  font-weight: 700;
+  letter-spacing: 1px;
+  line-height: 1.32;
+  max-width: calc(100% - var(--quote-btn-safe-space));
+  padding: 0 24px 2px;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+.quote-text-size-md {
+  font-size: clamp(20px, 2.5vw, 28px);
+}
+
+.quote-text-size-lg {
+  font-size: clamp(18px, 2.2vw, 24px);
+}
+
+.quote-text-size-xl {
+  font-size: clamp(16px, 2vw, 21px);
+}
+
+.quote-author {
+  margin: 10px 0 0;
+  max-width: calc(100% - var(--quote-btn-safe-space));
+  margin-left: auto;
+  text-align: right;
+  font-size: 24px;
+  font-weight: 700;
+  color: rgba(231, 242, 255, 0.95);
+}
+
+.quick-links {
+  display: flex;
+  justify-content: center;
+  flex-wrap: nowrap;
+  gap: 14px;
+  margin-top: 12px;
+}
+
+.quick-link {
+  display: inline-flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+  min-width: 108px;
+  padding: 6px 10px 6px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: var(--surface-2);
+  color: var(--text-main);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  transition:
+    transform 0.18s ease,
+    background-color 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.quick-link-key {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 5px;
+  margin-bottom: 3px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.quick-link-title {
+  line-height: 1.2;
+  font-size: 12px;
+}
+
+.quick-link-hint {
+  margin-top: 2px;
+  font-size: 10px;
+  color: rgba(225, 235, 247, 0.78);
+}
+
+.quick-link:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.32);
+  background: rgba(22, 37, 67, 0.72);
+}
+
+.shortcut-guide {
+  margin: 10px 0 4px;
+  font-size: 13px;
+  color: rgba(227, 238, 250, 0.83);
+  letter-spacing: 0.02em;
+}
+
+@media (max-width: 900px) {
+  .quote-card {
+    --quote-btn-safe-space: 104px;
+    padding: 20px 18px 18px;
+  }
+
+  .quote-refresh-btn {
+    top: 8px;
+    right: 8px;
+    font-size: 10px;
+    padding: 3px 8px;
+  }
+
+  .quote-mark {
+    font-size: 32px;
+  }
+
+  .quote-mark-start {
+    left: 12px;
+  }
+
+  .quote-mark-end {
+    right: 14px;
+    bottom: 14px;
+  }
+
+  .quote-author {
+    font-size: clamp(18px, 4.5vw, 24px);
+  }
+
+  .quote-text {
+    max-width: calc(100% - var(--quote-btn-safe-space));
+    padding: 0 14px;
+  }
+
+  .quick-link {
+    min-width: 96px;
+    font-size: clamp(12px, 3.4vw, 14px);
+    align-items: center;
+    padding: 6px 9px;
+  }
+
+  .quick-links {
+    flex-wrap: wrap;
+    gap: 11px;
+  }
+
+  .shortcut-guide {
+    font-size: 12px;
+    line-height: 1.35;
+  }
+}
+
+@media (max-height: 760px) {
+  .quote-card {
+    margin-bottom: 8px;
+    padding: 16px 16px 14px;
+  }
+
+  .quick-links {
+    margin-top: 8px;
+    gap: 10px;
+  }
+
+  .shortcut-guide {
+    margin-top: 8px;
+    font-size: 12px;
+  }
+}

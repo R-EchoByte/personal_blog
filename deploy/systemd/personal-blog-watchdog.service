@@ -1,0 +1,7 @@
+[Unit]
+Description=personal_blog watchdog
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/__SERVICE_NAME__-watchdog.sh __APP_PORT__ __SERVICE_NAME__

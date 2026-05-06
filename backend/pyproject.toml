@@ -1,0 +1,30 @@
+[project]
+name = "personal-blog-backend"
+version = "0.1.0"
+description = "Integrated FastAPI backend for personal_blog"
+readme = "../README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi==0.122.0",
+  "httpx==0.28.1",
+  "pydantic-settings==2.11.0",
+  "uvicorn[standard]==0.38.0",
+]
+
+[dependency-groups]
+dev = [
+  "pyinstaller==6.16.0",
+  "ruff==0.14.14",
+  "ty==0.0.14",
+]
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+exclude = [".venv", ".venv-build", "build", "dist"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+
+[tool.ty.src]
+include = ["app", "run.py"]

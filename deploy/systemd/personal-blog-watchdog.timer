@@ -1,0 +1,10 @@
+[Unit]
+Description=Run personal_blog watchdog every minute
+
+[Timer]
+OnBootSec=45s
+OnUnitActiveSec=60s
+Unit=__WATCHDOG_SERVICE_NAME__
+
+[Install]
+WantedBy=timers.target

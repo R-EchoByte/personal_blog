@@ -24,18 +24,31 @@ async function main() {
   await fs.mkdir(publicDir, { recursive: true });
 
   const allFiles = await walkFiles(publicDir);
-  const images = allFiles
-    .map((fullPath) => path.relative(publicDir, fullPath))
-    .filter((relativePath) => relativePath.toLowerCase() !== "bj-manifest.json")
-    .filter((relativePath) => /^bj/i.test(path.basename(relativePath)))
-    .filter((relativePath) =>
-      imageExts.has(path.extname(relativePath).toLowerCase()),
-    )
-    .map((relativePath) => `/${relativePath.replace(/\\/g, "/")}`)
-    .sort((a, b) => a.localeCompare(b));
+  const imageRecords = await Promise.all(
+    allFiles
+      .map((fullPath) => path.relative(publicDir, fullPath))
+      .filter((relativePath) => relativePath.toLowerCase() !== "bj-manifest.json")
+      .filter((relativePath) => /^bj/i.test(path.basename(relativePath)))
+      .filter((relativePath) =>
+        imageExts.has(path.extname(relativePath).toLowerCase()),
+      )
+      .map(async (relativePath) => {
+        const fullPath = path.join(publicDir, relativePath);
+        const stats = await fs.stat(fullPath);
+        return {
+          src: `/${relativePath.replace(/\\/g, "/")}`,
+          bytes: stats.size,
+        };
+      }),
+  );
+
+  imageRecords.sort((a, b) => a.bytes - b.bytes || a.src.localeCompare(b.src));
+  const images = imageRecords.map((item) => item.src);
 
   const manifest = {
     images,
+    initialImage: images[0] ?? null,
+    entries: imageRecords,
     generatedAt: new Date().toISOString(),
   };
 

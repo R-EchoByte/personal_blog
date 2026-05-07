@@ -109,7 +109,10 @@ export default function SoftwarePage() {
         </div>
         <div className="software-header-actions">
           <Link className="software-header-link" to="/software/admin">
-            进入管理台
+            进入上传台
+          </Link>
+          <Link className="software-home-link" to="/software/admin/accounts">
+            账号中心
           </Link>
           <Link className="software-home-link" to="/">
             返回首页

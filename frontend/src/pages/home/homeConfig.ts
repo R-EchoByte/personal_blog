@@ -14,7 +14,7 @@ export const QUICK_LINKS: QuickLink[] = [
 ];
 
 export const PARTICLE_WORDS = [
-  "I'M 小镇子",
+  "I'm 小镇子",
   "我是黑狙dog",
   "resohub.top",
 ];

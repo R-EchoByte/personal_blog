@@ -54,7 +54,17 @@ export function resolveApiUrl(path: string): string {
 export async function apiGet<T>(path: string, init?: RequestInit): Promise<T> {
   const response = await fetch(buildUrl(path), init);
   if (!response.ok) {
-    throw new ApiError(`Request failed: ${response.status}`, response.status);
+    let message = `Request failed: ${response.status}`;
+    try {
+      const data = (await response.json()) as { detail?: unknown };
+      const detailMessage = normalizeErrorDetail(data.detail);
+      if (detailMessage) {
+        message = detailMessage;
+      }
+    } catch {
+      // ignore json parse failures
+    }
+    throw new ApiError(message, response.status);
   }
   return response.json() as Promise<T>;
 }

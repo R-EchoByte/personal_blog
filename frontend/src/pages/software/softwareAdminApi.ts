@@ -11,6 +11,12 @@ export function getPublishedResources() {
   return apiGet<{ items: PublishedResource[] }>("/api/v1/resources");
 }
 
+export function getScopedResources(token: string) {
+  return apiGet<{ items: PublishedResource[] }>("/api/v1/admin/resources", {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+}
+
 export function adminLogin(username: string, password: string) {
   return apiRequest<AdminLoginResponse>("/api/v1/admin/login", {
     method: "POST",
@@ -51,9 +57,9 @@ export function updateAdminCredentials(
 
 export function createAdminAccount(
   token: string,
-  payload: { username: string; password: string },
+  payload: { username: string; password: string; role: "admin" | "user" },
 ) {
-  return apiRequest<AdminProfile>("/api/v1/admin/accounts", {
+  return apiRequest<{ item: AdminAccount }>("/api/v1/admin/accounts", {
     method: "POST",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -69,6 +75,27 @@ export function deleteAdminAccount(token: string, username: string) {
     {
       method: "DELETE",
       headers: { Authorization: `Bearer ${token}` },
+    },
+  );
+}
+
+export function updateAdminAccount(
+  token: string,
+  username: string,
+  payload: {
+    new_password?: string;
+    new_role?: "admin" | "user";
+  },
+) {
+  return apiRequest<{ item: AdminAccount }>(
+    `/api/v1/admin/accounts/${encodeURIComponent(username)}`,
+    {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
     },
   );
 }

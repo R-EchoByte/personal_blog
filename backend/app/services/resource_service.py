@@ -18,6 +18,7 @@ from app.core.storage import (
     get_tool_upload_dir,
 )
 from app.schemas.admin import PublishedResource, ResourceKind
+from app.services.admin_auth_service import CurrentAccount
 
 SAFE_FILE_NAME = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$")
 SCRIPT_EXTENSIONS = {".sh"}
@@ -119,13 +120,29 @@ def _to_resource(item: dict[str, Any]) -> PublishedResource:
         download_url=item["download_url"],
         root_url=root_url,
         wget_command=wget_command,
+        owner_username=item.get("owner_username", "admin"),
         created_at=datetime.fromisoformat(item["created_at"]),
     )
 
 
-def list_resources() -> list[PublishedResource]:
-    items = [_to_resource(item) for item in _read_metadata()]
+def list_resources(viewer: CurrentAccount | None = None) -> list[PublishedResource]:
+    resource_items = _read_metadata()
+    if viewer is not None and not viewer.can_view_all_resources:
+        resource_items = [
+            item
+            for item in resource_items
+            if item.get("owner_username", "admin") == viewer.username
+        ]
+    items = [_to_resource(item) for item in resource_items]
     return sorted(items, key=lambda item: item.created_at, reverse=True)
+
+
+def count_resources_by_owner() -> dict[str, int]:
+    counts: dict[str, int] = {}
+    for item in _read_metadata():
+        owner = str(item.get("owner_username", "admin"))
+        counts[owner] = counts.get(owner, 0) + 1
+    return counts
 
 
 def _clean_text(value: str, field_name: str) -> str:
@@ -160,6 +177,7 @@ def _clean_list(value: list[str], fallback: list[str], *, limit: int) -> list[st
 
 def save_uploaded_resource(
     *,
+    owner: CurrentAccount,
     file: UploadFile,
     kind: ResourceKind,
     name: str,
@@ -206,6 +224,7 @@ def save_uploaded_resource(
         "kind": kind,
         "download_url": download_url,
         "root_url": root_url,
+        "owner_username": owner.username,
         "created_at": _now().isoformat(),
     }
     items = _read_metadata()
@@ -214,7 +233,7 @@ def save_uploaded_resource(
     return _to_resource(item)
 
 
-def delete_resource(resource_id: str) -> None:
+def delete_resource(resource_id: str, actor: CurrentAccount) -> None:
     items = _read_metadata()
     retained_items: list[dict[str, Any]] = []
     deleted_item: dict[str, Any] | None = None
@@ -228,6 +247,14 @@ def delete_resource(resource_id: str) -> None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="资源不存在",
+        )
+    if (
+        not actor.can_view_all_resources
+        and deleted_item.get("owner_username", "admin") != actor.username
+    ):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="无权删除其他账号上传的资源",
         )
 
     file_path = _resource_dirs()[deleted_item["kind"]] / deleted_item["file_name"]

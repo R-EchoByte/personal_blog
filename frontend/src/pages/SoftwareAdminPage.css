@@ -1,4 +1,5 @@
 .software-admin-page {
+  position: relative;
   height: 100dvh;
   background: linear-gradient(180deg, #f7f9fc 0%, #eef3f9 100%);
   color: #17202b;
@@ -9,8 +10,7 @@
 }
 
 .software-admin-header,
-.software-admin-status,
-.software-admin-guide-card {
+.software-admin-status {
   border: 1px solid #dde6f0;
   background: #ffffff;
   border-radius: 8px;
@@ -25,6 +25,10 @@
   gap: 16px;
 }
 
+.software-admin-header-main {
+  max-width: 620px;
+}
+
 .software-admin-eyebrow,
 .software-admin-kicker {
   margin: 0 0 8px;
@@ -35,13 +39,15 @@
 }
 
 .software-admin-header h1,
-.software-admin-guide-card h2 {
+ .software-admin-login-card h2 {
   margin: 0;
 }
 
-.software-admin-header p,
-.software-admin-guide-card p,
-.software-admin-guide-card li {
+.software-admin-header h1 {
+  font-size: 24px;
+}
+
+.software-admin-login-copy {
   color: #5f7084;
   line-height: 1.7;
 }
@@ -50,6 +56,8 @@
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
 }
 
 .software-admin-link {
@@ -65,6 +73,42 @@
   text-decoration: none;
   font-size: 13px;
   font-weight: 700;
+}
+
+.software-admin-link-muted {
+  border-color: #d7e1eb;
+  background: #f8fafc;
+  color: #47617b;
+  cursor: pointer;
+}
+
+.software-admin-userbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border: 1px solid #dde6f0;
+  border-radius: 10px;
+  background: #f8fbfe;
+}
+
+.software-admin-userbox-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.software-admin-userbox-label {
+  color: #7588a0;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.software-admin-userbox strong {
+  color: #1d334e;
+  font-size: 14px;
+  line-height: 1.2;
 }
 
 .software-admin-status {
@@ -88,47 +132,133 @@
   font-weight: 700;
 }
 
-.software-admin-guide-grid {
-  margin-top: 18px;
+.software-admin-login-modal {
+  position: fixed;
+  inset: 0;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  place-items: center;
+  padding: 20px;
+  background: rgba(9, 16, 28, 0.42);
+  backdrop-filter: blur(10px);
+  z-index: 30;
+}
+
+.software-admin-login-card {
+  width: min(420px, 100%);
+  border: 1px solid #dbe5f0;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 24px 60px rgba(15, 31, 52, 0.18);
+  padding: 24px;
+  display: grid;
+  gap: 16px;
+}
+
+.software-admin-confirm-card {
+  width: min(420px, 100%);
+  border: 1px solid #dbe5f0;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 24px 60px rgba(15, 31, 52, 0.18);
+  padding: 24px;
+  display: grid;
+  gap: 16px;
+}
+
+.software-account-edit-dialog {
+  width: min(560px, 100%);
+}
+
+.software-admin-login-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   gap: 12px;
 }
 
-.software-admin-guide-card {
-  padding: 16px;
+.software-admin-login-copy {
+  margin: -6px 0 0;
+  font-size: 14px;
 }
 
-.software-admin-guide-card ul,
-.software-admin-guide-card ol {
-  margin: 12px 0 0;
-  padding-left: 18px;
-}
-
-.software-admin-stat-row {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-top: 12px;
-}
-
-.software-admin-stat-row span {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 30px;
-  padding: 0 10px;
-  border-radius: 999px;
-  background: #edf4fb;
-  color: #1d446d;
-  font-size: 12px;
+.software-admin-login-error {
+  border: 1px solid #f0caca;
+  background: #fff4f4;
+  color: #b54343;
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-size: 13px;
   font-weight: 700;
 }
 
-@media (max-width: 1100px) {
-  .software-admin-guide-grid {
-    grid-template-columns: 1fr;
-  }
+.software-admin-login-form {
+  display: grid;
+  gap: 14px;
+}
+
+.software-admin-login-close {
+  width: 34px;
+  height: 34px;
+  border: 1px solid #d7e1eb;
+  background: #ffffff;
+  color: #5f7084;
+  border-radius: 999px;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.software-admin-login-field {
+  display: grid;
+  gap: 8px;
+}
+
+.software-admin-login-field span {
+  font-size: 12px;
+  font-weight: 700;
+  color: #6a7d92;
+}
+
+.software-admin-login-field input {
+  width: 100%;
+  border: 1px solid #d7e1eb;
+  background: #f8fafc;
+  color: #1b2634;
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 14px;
+  font-family: inherit;
+}
+
+.software-admin-login-submit {
+  min-height: 42px;
+  border: 1px solid #8ab3e5;
+  background: #ebf3fb;
+  color: #17385b;
+  border-radius: 12px;
+  padding: 0 16px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.software-admin-login-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.software-admin-confirm-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.software-admin-link-danger {
+  border-color: #e8c8c8;
+  background: #fff4f4;
+  color: #ab3f3f;
+  cursor: pointer;
 }
 
 @media (max-width: 720px) {
@@ -140,5 +270,28 @@
   .software-admin-status {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .software-admin-header-actions,
+  .software-admin-userbox,
+  .software-admin-confirm-actions {
+    width: 100%;
+  }
+
+  .software-admin-userbox,
+  .software-admin-userbox-meta {
+    justify-content: space-between;
+  }
+
+  .software-admin-login-card {
+    padding: 18px;
+  }
+
+  .software-admin-confirm-card {
+    padding: 18px;
+  }
+
+  .software-admin-login-card h2 {
+    font-size: 24px;
   }
 }

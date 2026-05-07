@@ -34,18 +34,23 @@ export type PublishedResource = {
   download_url: string;
   root_url: string | null;
   wget_command: string | null;
+  owner_username: string;
   created_at: string;
 };
 
 export type AdminProfile = {
   username: string;
+  role: "system" | "admin" | "user";
   authenticated: boolean;
+  can_manage_accounts: boolean;
+  can_view_all_resources: boolean;
 };
 
 export type AdminAccount = {
   username: string;
-  role: "system" | "managed";
+  role: "system" | "admin" | "user";
   is_current: boolean;
+  resource_count: number;
 };
 
 export type AdminLoginResponse = {
@@ -53,4 +58,5 @@ export type AdminLoginResponse = {
   token_type: string;
   expires_at: string;
   username: string;
+  role: "system" | "admin" | "user";
 };

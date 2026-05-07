@@ -6,6 +6,7 @@ from typing import Literal
 from pydantic import BaseModel, Field
 
 ResourceKind = Literal["script", "tool"]
+AccountRole = Literal["system", "admin", "user"]
 
 
 class AdminLoginRequest(BaseModel):
@@ -18,17 +19,22 @@ class AdminTokenResponse(BaseModel):
     token_type: str = "bearer"
     expires_at: datetime
     username: str
+    role: AccountRole
 
 
 class AdminProfileResponse(BaseModel):
     username: str
+    role: AccountRole
     authenticated: bool = True
+    can_manage_accounts: bool = False
+    can_view_all_resources: bool = False
 
 
 class AdminAccountSummary(BaseModel):
     username: str
-    role: Literal["system", "managed"]
+    role: AccountRole
     is_current: bool = False
+    resource_count: int = 0
 
 
 class AdminCredentialUpdateRequest(BaseModel):
@@ -40,6 +46,12 @@ class AdminCredentialUpdateRequest(BaseModel):
 class AdminAccountCreateRequest(BaseModel):
     username: str = Field(min_length=3, max_length=64)
     password: str = Field(min_length=8, max_length=128)
+    role: Literal["admin", "user"] = "user"
+
+
+class AdminAccountUpdateRequest(BaseModel):
+    new_password: str | None = Field(default=None, min_length=8, max_length=128)
+    new_role: Literal["admin", "user"] | None = None
 
 
 class PublishedResource(BaseModel):
@@ -57,6 +69,7 @@ class PublishedResource(BaseModel):
     download_url: str
     root_url: str | None = None
     wget_command: str | None = None
+    owner_username: str
     created_at: datetime
 
 
@@ -78,3 +91,7 @@ class AdminAccountListResponse(BaseModel):
 
 class AdminAccountDeleteResponse(BaseModel):
     deleted_username: str
+
+
+class AdminAccountUpdateResponse(BaseModel):
+    item: AdminAccountSummary

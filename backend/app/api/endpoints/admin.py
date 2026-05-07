@@ -17,6 +17,8 @@ from app.schemas.admin import (
     AdminAccountCreateRequest,
     AdminAccountDeleteResponse,
     AdminAccountListResponse,
+    AdminAccountUpdateRequest,
+    AdminAccountUpdateResponse,
     AdminCredentialUpdateRequest,
     AdminLoginRequest,
     AdminProfileResponse,
@@ -27,11 +29,13 @@ from app.schemas.admin import (
     UploadResponse,
 )
 from app.services.admin_auth_service import (
+    CurrentAccount,
     authenticate_admin,
-    create_managed_admin,
-    delete_managed_admin,
+    create_managed_account,
+    delete_managed_account,
     list_admin_accounts,
     update_admin_credentials,
+    update_managed_account,
     verify_admin_token,
 )
 from app.services.resource_service import (
@@ -45,7 +49,7 @@ router = APIRouter(tags=["admin"])
 
 def get_current_admin(
     authorization: str = Header(default="", alias="Authorization"),
-) -> str:
+) -> CurrentAccount:
     if not authorization.startswith("Bearer "):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -61,46 +65,66 @@ def admin_login(payload: AdminLoginRequest) -> AdminTokenResponse:
         access_token=token.token,
         expires_at=token.expires_at,
         username=payload.username,
+        role=token.role,
     )
 
 
 @router.get("/admin/me", response_model=AdminProfileResponse)
-def admin_me(username: str = Depends(get_current_admin)) -> AdminProfileResponse:
-    return AdminProfileResponse(username=username)
+def admin_me(current_admin=Depends(get_current_admin)) -> AdminProfileResponse:
+    return current_admin.to_profile()
 
 
 @router.post("/admin/credentials", response_model=AdminProfileResponse)
 def update_credentials(
     payload: AdminCredentialUpdateRequest,
-    username: str = Depends(get_current_admin),
+    current_admin=Depends(get_current_admin),
 ) -> AdminProfileResponse:
-    update_admin_credentials(
-        username=username,
+    updated_account = update_admin_credentials(
+        current_account=current_admin,
         current_password=payload.current_password,
         new_username=payload.new_username,
         new_password=payload.new_password,
     )
-    return AdminProfileResponse(username=payload.new_username)
+    return updated_account.to_profile()
 
 
 @router.get("/admin/accounts", response_model=AdminAccountListResponse)
 def get_admin_accounts(
-    username: str = Depends(get_current_admin),
+    current_admin=Depends(get_current_admin),
 ) -> AdminAccountListResponse:
-    return AdminAccountListResponse(items=list_admin_accounts(username))
+    return AdminAccountListResponse(items=list_admin_accounts(current_admin))
 
 
-@router.post("/admin/accounts", response_model=AdminProfileResponse)
+@router.post("/admin/accounts", response_model=AdminAccountUpdateResponse)
 def create_admin_account(
     payload: AdminAccountCreateRequest,
-    username: str = Depends(get_current_admin),
-) -> AdminProfileResponse:
-    account = create_managed_admin(
-        actor_username=username,
+    current_admin=Depends(get_current_admin),
+) -> AdminAccountUpdateResponse:
+    account = create_managed_account(
+        actor=current_admin,
         username=payload.username,
         password=payload.password,
+        role=payload.role,
     )
-    return AdminProfileResponse(username=account.username)
+    return AdminAccountUpdateResponse(item=account)
+
+
+@router.patch(
+    "/admin/accounts/{username}",
+    response_model=AdminAccountUpdateResponse,
+)
+def patch_admin_account(
+    username: str,
+    payload: AdminAccountUpdateRequest,
+    current_admin=Depends(get_current_admin),
+) -> AdminAccountUpdateResponse:
+    account = update_managed_account(
+        actor=current_admin,
+        username=username,
+        new_password=payload.new_password,
+        new_role=payload.new_role,
+    )
+    return AdminAccountUpdateResponse(item=account)
 
 
 @router.delete(
@@ -109,9 +133,9 @@ def create_admin_account(
 )
 def remove_admin_account(
     username: str,
-    actor_username: str = Depends(get_current_admin),
+    current_admin=Depends(get_current_admin),
 ) -> AdminAccountDeleteResponse:
-    delete_managed_admin(actor_username=actor_username, username=username)
+    delete_managed_account(actor=current_admin, username=username)
     return AdminAccountDeleteResponse(deleted_username=username)
 
 
@@ -120,9 +144,16 @@ def get_resources() -> ResourceListResponse:
     return ResourceListResponse(items=list_resources())
 
 
+@router.get("/admin/resources", response_model=ResourceListResponse)
+def get_admin_resources(
+    current_admin=Depends(get_current_admin),
+) -> ResourceListResponse:
+    return ResourceListResponse(items=list_resources(current_admin))
+
+
 @router.post("/admin/resources/upload", response_model=UploadResponse)
 def upload_resource(
-    _: str = Depends(get_current_admin),
+    current_admin=Depends(get_current_admin),
     file: UploadFile = File(...),
     kind: str = Form(...),
     name: str = Form(...),
@@ -138,6 +169,7 @@ def upload_resource(
             detail="资源类型仅支持 script 或 tool",
         )
     resource = save_uploaded_resource(
+        owner=current_admin,
         file=file,
         kind=cast(ResourceKind, kind),
         name=name,
@@ -156,9 +188,9 @@ def upload_resource(
 )
 def remove_resource(
     resource_id: str,
-    _: str = Depends(get_current_admin),
+    current_admin=Depends(get_current_admin),
 ) -> DeleteResourceResponse:
-    delete_resource(resource_id)
+    delete_resource(resource_id, current_admin)
     return DeleteResourceResponse(deleted_id=resource_id)
 
 

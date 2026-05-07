@@ -19,7 +19,7 @@ NGINX_SITE_NAME ?= personal-blog.conf
 NGINX_SITE_AVAILABLE ?= /etc/nginx/sites-available/$(NGINX_SITE_NAME)
 NGINX_SITE_ENABLED ?= /etc/nginx/sites-enabled/$(NGINX_SITE_NAME)
 
-.PHONY: help preflight frontend-build backend-sync backend-check backend-typecheck backend-lock backend-package package show-version smoke install-systemd install-watchdog install-nginx restart-service status-service status-watchdog deploy clean
+.PHONY: help preflight frontend-build backend-sync backend-check backend-typecheck backend-test backend-lock backend-package package show-version smoke install-systemd install-watchdog install-nginx restart-service status-service status-watchdog deploy clean
 
 help:
 	@echo "Available targets:"
@@ -29,6 +29,7 @@ help:
 	@echo "  make backend-sync      # 同步后端构建环境"
 	@echo "  make backend-check     # 运行 ruff 检查"
 	@echo "  make backend-typecheck # 运行 ty 类型检查"
+	@echo "  make backend-test      # 运行后端 unittest 回归"
 	@echo "  make backend-package   # 生成 PyInstaller 产物"
 	@echo "  make package           # 执行完整打包流程"
 	@echo "  make show-version      # 输出打包产物版本"
@@ -62,6 +63,9 @@ backend-check:
 
 backend-typecheck:
 	cd $(BACKEND_DIR) && UV_PROJECT_ENVIRONMENT=$(BACKEND_VENV) uv run ty check --python $(BACKEND_PYTHON)
+
+backend-test:
+	cd $(BACKEND_DIR) && UV_PROJECT_ENVIRONMENT=$(BACKEND_VENV) uv run python -m unittest discover -s tests -v
 
 backend-package:
 	rm -f $(BACKEND_DIST)

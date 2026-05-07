@@ -5,6 +5,7 @@ import "./MoviesPage.css";
 
 type MovieCategory = "全部" | "电视剧" | "综艺" | "电影" | "动漫";
 type SideMenu = "首页" | "电视剧" | "综艺" | "电影" | "动漫";
+type SortMode = "推荐" | "评分" | "热度" | "更新";
 
 type MovieCard = {
   id: string;
@@ -30,6 +31,7 @@ const CATEGORY_TABS: MovieCategory[] = [
 ];
 
 const SIDE_MENUS: SideMenu[] = ["首页", "电视剧", "电影", "综艺", "动漫"];
+const SORT_TABS: SortMode[] = ["推荐", "评分", "热度", "更新"];
 
 const MOVIES: MovieCard[] = [
   {
@@ -143,6 +145,7 @@ function normalizeSearchText(text: string): string {
 export default function MoviesPage() {
   const [activeCategory, setActiveCategory] = useState<MovieCategory>("全部");
   const [searchKeyword, setSearchKeyword] = useState("");
+  const [sortMode, setSortMode] = useState<SortMode>("推荐");
   const [activeMovieId, setActiveMovieId] = useState<string>(
     MOVIES[0]?.id ?? "",
   );
@@ -152,9 +155,8 @@ export default function MoviesPage() {
     [searchKeyword],
   );
 
-  const filteredMovies = useMemo(
-    () =>
-      MOVIES.filter((movie) => {
+  const filteredMovies = useMemo(() => {
+    const result = MOVIES.filter((movie) => {
         const categoryMatched =
           activeCategory === "全部" || movie.category === activeCategory;
         if (!categoryMatched) return false;
@@ -165,9 +167,22 @@ export default function MoviesPage() {
           `${movie.title} ${movie.subtitle} ${movie.description} ${movie.people.join(" ")}`,
         );
         return searchableText.includes(normalizedSearchKeyword);
-      }),
-    [activeCategory, normalizedSearchKeyword],
-  );
+      });
+
+    if (sortMode === "评分") {
+      return [...result].sort((a, b) => b.rating - a.rating);
+    }
+
+    if (sortMode === "更新") {
+      return [...result].sort((a, b) => b.episodes - a.episodes);
+    }
+
+    if (sortMode === "热度") {
+      return [...result].sort((a, b) => b.heatText.localeCompare(a.heatText));
+    }
+
+    return result;
+  }, [activeCategory, normalizedSearchKeyword, sortMode]);
 
   useEffect(() => {
     if (filteredMovies.length === 0) {
@@ -203,34 +218,20 @@ export default function MoviesPage() {
     setActiveCategory(menu === "首页" ? "全部" : menu);
   };
 
+  const handleMovieActivate = (movieId: string, episodeIndex = 0) => {
+    setActiveMovieId(movieId);
+    setActiveEpisodeIndex(episodeIndex);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
     <section className="moviehub-page">
-      <aside className="moviehub-sidebar">
-        <div className="moviehub-logo">影域</div>
-        <nav className="moviehub-side-nav" aria-label="影视导航">
-          {SIDE_MENUS.map((item) => (
-            <button
-              key={item}
-              type="button"
-              className={
-                item === activeSideMenu
-                  ? "moviehub-side-item is-active"
-                  : "moviehub-side-item"
-              }
-              onClick={() => handleSideMenuClick(item)}
-            >
-              <span>{item}</span>
-            </button>
-          ))}
-        </nav>
-        <Link className="moviehub-back-home" to="/">
-          返回首页
-        </Link>
-      </aside>
-
       <main className="moviehub-main">
         <header className="moviehub-topbar">
-          <h1 className="moviehub-top-title">影视网</h1>
+          <div>
+            <p className="moviehub-eyebrow">Movie Hub</p>
+            <h1 className="moviehub-top-title">影视网</h1>
+          </div>
           <div className="moviehub-search-panel">
             <div className="moviehub-search-wrap">
               <input
@@ -254,10 +255,31 @@ export default function MoviesPage() {
               当前结果：{filteredMovies.length} 部
             </p>
           </div>
+          <Link className="moviehub-back-home" to="/">
+            返回首页
+          </Link>
         </header>
 
         <section className="moviehub-channel">
-          <h1>重磅热播</h1>
+          <div className="moviehub-channel-head">
+            <h2>重磅热播</h2>
+            <nav className="moviehub-side-nav" aria-label="影视导航">
+              {SIDE_MENUS.map((item) => (
+                <button
+                  key={item}
+                  type="button"
+                  className={
+                    item === activeSideMenu
+                      ? "moviehub-side-item is-active"
+                      : "moviehub-side-item"
+                  }
+                  onClick={() => handleSideMenuClick(item)}
+                >
+                  <span>{item}</span>
+                </button>
+              ))}
+            </nav>
+          </div>
           <div className="moviehub-categories">
             {CATEGORY_TABS.map((tab) => (
               <button
@@ -274,13 +296,29 @@ export default function MoviesPage() {
               </button>
             ))}
           </div>
+          <div className="moviehub-sort-row" aria-label="排序方式">
+            {SORT_TABS.map((tab) => (
+              <button
+                key={tab}
+                type="button"
+                className={
+                  tab === sortMode
+                    ? "moviehub-sort-chip is-active"
+                    : "moviehub-sort-chip"
+                }
+                onClick={() => setSortMode(tab)}
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
         </section>
 
         {activeMovie ? (
-          <section
-            className="moviehub-player-strip"
-            style={{ backgroundImage: `url("${activeMovie.cover}")` }}
-          >
+          <section className="moviehub-player-strip">
+            <div className="moviehub-poster-wrap">
+              <img src={activeMovie.cover} alt={activeMovie.title} loading="lazy" />
+            </div>
             <div className="moviehub-player-mask">
               <p className="moviehub-player-meta">
                 正在播放 · {activeMovie.category}
@@ -291,12 +329,26 @@ export default function MoviesPage() {
                 人员：{activeMovie.people.join(" / ")}
               </p>
               <div className="moviehub-player-actions">
-                <button type="button" className="moviehub-play-btn">
-                  ▶ 立即播放
+                <button
+                  type="button"
+                  className="moviehub-action-btn moviehub-action-btn-primary"
+                >
+                  立即播放
+                </button>
+                <button
+                  type="button"
+                  className="moviehub-action-btn moviehub-action-btn-secondary"
+                  onClick={() => {
+                    document
+                      .getElementById("moviehub-episode-row")
+                      ?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+                  }}
+                >
+                  查看选集
                 </button>
                 <span>{activeMovie.updateText}</span>
               </div>
-              <div className="moviehub-episode-row">
+              <div id="moviehub-episode-row" className="moviehub-episode-row">
                 {activeEpisodes.map((episode, index) => (
                   <button
                     key={episode}
@@ -318,15 +370,22 @@ export default function MoviesPage() {
 
         <section className="moviehub-grid" aria-label="影视卡片列表">
           {filteredMovies.map((movie) => (
-            <button
+            <article
               key={movie.id}
-              type="button"
               className={
                 movie.id === activeMovieId
                   ? "moviehub-card is-active"
                   : "moviehub-card"
               }
+              tabIndex={0}
+              role="button"
               onClick={() => setActiveMovieId(movie.id)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                  event.preventDefault();
+                  setActiveMovieId(movie.id);
+                }
+              }}
             >
               <span className="moviehub-card-cover-wrap">
                 <img src={movie.cover} alt={movie.title} loading="lazy" />
@@ -341,7 +400,29 @@ export default function MoviesPage() {
                 {movie.description}
               </span>
               <span className="moviehub-card-heat">{movie.heatText}</span>
-            </button>
+              <div className="moviehub-card-actions">
+                <button
+                  type="button"
+                  className="moviehub-action-btn moviehub-action-btn-secondary"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    setActiveMovieId(movie.id);
+                  }}
+                >
+                  查看详情
+                </button>
+                <button
+                  type="button"
+                  className="moviehub-action-btn moviehub-action-btn-primary"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    handleMovieActivate(movie.id);
+                  }}
+                >
+                  立即播放
+                </button>
+              </div>
+            </article>
           ))}
         </section>
       </main>

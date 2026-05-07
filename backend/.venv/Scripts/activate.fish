@@ -91,8 +91,8 @@ set -gx PATH "$VIRTUAL_ENV"'/Scripts' $PATH
 
 # Prompt override provided?
 # If not, just use the environment name.
-if test -n 'backend'
-    set -gx VIRTUAL_ENV_PROMPT 'backend'
+if test -n 'personal-blog-backend'
+    set -gx VIRTUAL_ENV_PROMPT 'personal-blog-backend'
 else
     set -gx VIRTUAL_ENV_PROMPT (basename "$VIRTUAL_ENV")
 end

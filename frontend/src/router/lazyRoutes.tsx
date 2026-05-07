@@ -4,12 +4,15 @@ const HomePage = lazy(() => import("../pages/HomePage"));
 const FeaturePendingPage = lazy(() => import("../pages/FeaturePendingPage"));
 const MoviesPage = lazy(() => import("../pages/MoviesPage"));
 const NotFoundPage = lazy(() => import("../pages/NotFoundPage"));
+const SoftwareAdminPage = lazy(() => import("../pages/SoftwareAdminPage"));
+const SoftwarePage = lazy(() => import("../pages/SoftwarePage"));
 
 const routeImporters = {
   "/": () => import("../pages/HomePage"),
   "/blog": () => import("../pages/FeaturePendingPage"),
   "/ai": () => import("../pages/FeaturePendingPage"),
-  "/software": () => import("../pages/FeaturePendingPage"),
+  "/software": () => import("../pages/SoftwarePage"),
+  "/software/admin": () => import("../pages/SoftwareAdminPage"),
   "/movies": () => import("../pages/MoviesPage"),
   "*": () => import("../pages/NotFoundPage"),
 } as const;
@@ -36,7 +39,8 @@ export const lazyRouteElements = {
   home: withSuspense(<HomePage />),
   blog: withSuspense(<FeaturePendingPage title="Blog" />),
   ai: withSuspense(<FeaturePendingPage title="AI 工具" />),
-  software: withSuspense(<FeaturePendingPage title="软件资源" />),
+  software: withSuspense(<SoftwarePage />),
+  softwareAdmin: withSuspense(<SoftwareAdminPage />),
   movies: withSuspense(<MoviesPage />),
   notFound: withSuspense(<NotFoundPage />),
 } as const;

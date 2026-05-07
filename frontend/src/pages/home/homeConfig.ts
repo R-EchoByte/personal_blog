@@ -13,7 +13,11 @@ export const QUICK_LINKS: QuickLink[] = [
   { label: "影视网", href: "/movies", hint: "片库聚合", shortcut: "4" },
 ];
 
-export const PARTICLE_WORDS = ["I'm 小镇子", "Build AI, Ship Value."];
+export const PARTICLE_WORDS = [
+  "I'M 小镇子",
+  "我是黑狙dog",
+  "resohub.top",
+];
 export const LANDING_SUBTITLE = "Code · Life · Creation";
 export const TOOLBAR_BRAND = "rxw";
 export const FOOTER_COPYRIGHT = "Copyrights © 2025";

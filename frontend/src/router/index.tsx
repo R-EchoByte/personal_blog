@@ -12,6 +12,7 @@ export const router = createBrowserRouter([
       { path: "blog", element: lazyRouteElements.blog },
       { path: "ai", element: lazyRouteElements.ai },
       { path: "software", element: lazyRouteElements.software },
+      { path: "software/admin", element: lazyRouteElements.softwareAdmin },
       { path: "movies", element: lazyRouteElements.movies },
       { path: "*", element: lazyRouteElements.notFound },
     ],

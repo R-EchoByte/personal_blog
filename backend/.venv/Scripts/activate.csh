@@ -38,8 +38,8 @@ setenv PATH "$VIRTUAL_ENV:q/Scripts:$PATH:q"
 
 
 
-if ('backend' != "") then
-    setenv VIRTUAL_ENV_PROMPT 'backend'
+if ('personal-blog-backend' != "") then
+    setenv VIRTUAL_ENV_PROMPT 'personal-blog-backend'
 else
     setenv VIRTUAL_ENV_PROMPT "$VIRTUAL_ENV:t:q"
 endif

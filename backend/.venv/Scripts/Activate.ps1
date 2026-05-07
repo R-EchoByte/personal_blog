@@ -58,8 +58,8 @@ deactivate -nondestructive
 $VIRTUAL_ENV = $BASE_DIR
 $env:VIRTUAL_ENV = $VIRTUAL_ENV
 
-if ("backend" -ne "") {
-    $env:VIRTUAL_ENV_PROMPT = "backend"
+if ("personal-blog-backend" -ne "") {
+    $env:VIRTUAL_ENV_PROMPT = "personal-blog-backend"
 }
 else {
     $env:VIRTUAL_ENV_PROMPT = $( Split-Path $env:VIRTUAL_ENV -Leaf )

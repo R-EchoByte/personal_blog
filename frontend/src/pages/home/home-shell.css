@@ -155,15 +155,21 @@
 
 .particle-text-stage {
   width: min(720px, 100%);
-  margin: 2px auto 8px;
+  margin: 0 auto 4px;
+}
+
+.particle-text-stage-kainxu {
+  display: grid;
+  justify-items: center;
+  gap: 0;
 }
 
 .hero-title-stage {
   width: min(720px, 100%);
-  min-height: 144px;
+  min-height: 124px;
   display: grid;
   place-items: center;
-  margin: 2px auto 8px;
+  margin: 0 auto 2px;
 }
 
 .hero-title-stage .particle-text-stage {
@@ -284,7 +290,7 @@
   }
 
   .hero-title-stage {
-    min-height: 96px;
+    min-height: 92px;
     margin-bottom: 6px;
   }
 

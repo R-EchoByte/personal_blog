@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+from typing import Literal
 
 from fastapi import APIRouter, FastAPI
 from fastapi.exceptions import HTTPException
@@ -8,6 +9,7 @@ from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 
 from app.core.runtime import get_frontend_dist_dir
+from app.services.resource_service import resolve_public_file, resolve_root_script
 
 
 def _has_frontend_dist(dist_dir: Path) -> bool:
@@ -47,6 +49,14 @@ def register_spa_routes(app: FastAPI, dist_dir: Path, api_root_segment: str) -> 
     def spa_root() -> FileResponse:
         return FileResponse(index_file)
 
+    @spa_router.get("/downloads/{resource_kind}/{file_name}")
+    def public_download(resource_kind: str, file_name: str) -> FileResponse:
+        if resource_kind not in {"scripts", "tools"}:
+            raise HTTPException(status_code=404, detail="Not Found")
+        return FileResponse(
+            resolve_public_file(cast_download_kind(resource_kind), file_name)
+        )
+
     @spa_router.get("/{full_path:path}")
     def spa_fallback(full_path: str) -> FileResponse:
         if full_path == api_root_segment or full_path.startswith(
@@ -54,9 +64,17 @@ def register_spa_routes(app: FastAPI, dist_dir: Path, api_root_segment: str) -> 
         ):
             raise HTTPException(status_code=404, detail="Not Found")
 
+        script_path = resolve_root_script(full_path)
+        if script_path is not None:
+            return FileResponse(script_path)
+
         requested_path = (dist_dir / full_path).resolve()
         if requested_path.is_file() and dist_dir.resolve() in requested_path.parents:
             return FileResponse(requested_path)
         return FileResponse(index_file)
 
     app.include_router(spa_router)
+
+
+def cast_download_kind(resource_kind: str) -> Literal["scripts", "tools"]:
+    return "scripts" if resource_kind == "scripts" else "tools"

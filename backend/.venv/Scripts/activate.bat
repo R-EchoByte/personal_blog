@@ -28,7 +28,7 @@
 
 @for %%i in ("D:\仓库\personal_blog\backend\.venv") do @set "VIRTUAL_ENV=%%~fi"
 
-@set "VIRTUAL_ENV_PROMPT=backend"
+@set "VIRTUAL_ENV_PROMPT=personal-blog-backend"
 @if NOT DEFINED VIRTUAL_ENV_PROMPT (
     @for %%d in ("%VIRTUAL_ENV%") do @set "VIRTUAL_ENV_PROMPT=%%~nxd"
 )

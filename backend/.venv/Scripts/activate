@@ -98,8 +98,8 @@ _OLD_VIRTUAL_PATH="$PATH"
 PATH="$VIRTUAL_ENV/Scripts:$PATH"
 export PATH
 
-if [ "xbackend" != x ] ; then
-    VIRTUAL_ENV_PROMPT="backend"
+if [ "xpersonal-blog-backend" != x ] ; then
+    VIRTUAL_ENV_PROMPT="personal-blog-backend"
 else
     VIRTUAL_ENV_PROMPT=$(basename "$VIRTUAL_ENV")
 fi
